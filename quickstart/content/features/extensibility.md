@@ -14,10 +14,10 @@ Built-in custom shortcodes for enhanced content integration:
 
 ### Jupyter Notebook Integration
 
-The `{{< jupyter >}}` shortcode enables seamless embedding of Jupyter notebooks:
+The `{{</* jupyter */>}}` shortcode enables seamless embedding of Jupyter notebooks:
 
 ```hugo
-{{< jupyter "path/to/notebook.ipynb" >}}
+{{</* jupyter "path/to/notebook.ipynb" */>}}
 ```
 
 Custom HTML templates have been provided on the backend to render these shortcodes.
