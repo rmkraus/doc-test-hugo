@@ -1,0 +1,4 @@
+<video width="{{ .Get "width" | default "100%" }}" height="{{ .Get "height" | default "auto" }}" controls="{{ .Get "controls" | default "true" }}" preload="{{ .Get "preload" | default "auto" }}"{{ if .Get "autoplay" }} autoplay{{ end }}{{ if .Get "loop" }} loop{{ end }}{{ if .Get "muted" }} muted{{ end }}>
+  <source src="{{ .Get "src" }}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>

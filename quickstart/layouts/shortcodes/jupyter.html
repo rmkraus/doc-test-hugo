@@ -1,0 +1,134 @@
+{{/*
+Jupyter Notebook Shortcode with Enhanced Markdown Support
+Usage: {{< jupyter "path/to/notebook.ipynb" >}}
+Parameters:
+- src: path to the notebook file (relative to current page or absolute path in content)
+- id: optional unique identifier for the container (auto-generated if not provided)
+
+Features:
+- Full markdown rendering support using marked.js
+- Syntax highlighting for code blocks using Prism.js
+- HTML sanitization using DOMPurify
+- Post-processing fallback for any markdown cells that don't render initially
+- Automatic configuration of notebook.js before parsing
+*/}}
+
+{{ $src := .Get 0 | default (.Get "src") }}
+{{ $id := .Get "id" | default (printf "notebook-%d" now.Unix) }}
+
+{{ if not $src }}
+  {{ errorf "Jupyter shortcode requires a notebook path. Usage: {{< jupyter \"path/to/notebook.ipynb\" >}}" }}
+{{ end }}
+
+{{/* Read the notebook file relative to the current markdown file */}}
+{{ $currentDir := path.Dir .Page.File.Path }}
+{{ $notebookPath := path.Join "content" $currentDir $src }}
+{{ $notebookContent := "" }}
+
+{{ if fileExists $notebookPath }}
+  {{ $notebookContent = readFile $notebookPath }}
+{{ else }}
+  {{ errorf "Could not find notebook file: %s at path: %s" $src $notebookPath }}
+{{ end }}
+
+<div id="{{ $id }}" class="jupyter-notebook-container">
+  <div class="jupyter-loading">
+    <p>Loading notebook...</p>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Ensure notebook.js is loaded
+  if (typeof nb === 'undefined') {
+    console.error('notebook.js is not loaded. Please include it in your site.');
+    return;
+  }
+
+  const container = document.getElementById('{{ $id }}');
+  const loadingDiv = container.querySelector('.jupyter-loading');
+
+  try {
+    // Configure notebook.js with markdown rendering BEFORE parsing
+    if (typeof marked !== 'undefined') {
+      nb.markdown = function(text) {
+        return marked.parse(text);
+      };
+    }
+
+    // Configure HTML sanitization
+    if (typeof DOMPurify !== 'undefined') {
+      nb.sanitizer = function(html) {
+        return DOMPurify.sanitize(html);
+      };
+    }
+
+    // Configure syntax highlighting
+    if (typeof Prism !== 'undefined') {
+      nb.highlighter = function(text, pre, code, lang) {
+        if (code && lang && Prism.languages[lang]) {
+          pre.className = 'language-' + lang;
+          code.className = 'language-' + lang;
+          return Prism.highlight(text, Prism.languages[lang], lang);
+        }
+        return text;
+      };
+    }
+
+    // Parse the notebook content that's embedded inline
+    const notebookData = {{ $notebookContent | jsonify | safeJS }};
+
+    // If notebookData is a string, parse it to get the actual JSON object
+    const notebookObject = typeof notebookData === 'string' ? JSON.parse(notebookData) : notebookData;
+
+    // Parse and render the notebook using notebook.js (now properly configured)
+    const parsedNotebook = nb.parse(notebookObject);
+    const renderedNotebook = parsedNotebook.render();
+
+    // Replace loading message with rendered notebook
+    container.innerHTML = '';
+    container.appendChild(renderedNotebook);
+
+    // Add the jupyter-notebook class for styling
+    container.classList.add('jupyter-notebook');
+
+    // Post-process any markdown cells that weren't properly rendered
+    if (typeof marked !== 'undefined') {
+      const markdownCells = container.querySelectorAll('.cell.text_cell .rendered_html, .cell.markdown .rendered_html, .text_cell, .markdown');
+      markdownCells.forEach(function(cell) {
+        // Check if the cell contains raw markdown (not HTML)
+        if (cell.innerHTML === cell.textContent && cell.textContent.includes('#') || cell.textContent.includes('*') || cell.textContent.includes('[')) {
+          try {
+            const renderedMarkdown = marked.parse(cell.textContent);
+            if (typeof DOMPurify !== 'undefined') {
+              cell.innerHTML = DOMPurify.sanitize(renderedMarkdown);
+            } else {
+              cell.innerHTML = renderedMarkdown;
+            }
+          } catch (e) {
+            console.warn('Error post-processing markdown cell:', e);
+          }
+        }
+      });
+    }
+
+    // Apply syntax highlighting to any code blocks
+    if (typeof Prism !== 'undefined') {
+      Prism.highlightAllUnder(container);
+    }
+
+    // Trigger a custom event for post-processing (e.g., syntax highlighting)
+    const event = new CustomEvent('notebookRendered', {
+      detail: {
+        container: container,
+        notebook: parsedNotebook
+      }
+    });
+    document.dispatchEvent(event);
+
+  } catch (error) {
+    console.error('Error rendering notebook:', error);
+    container.innerHTML = `<div class="jupyter-error">Error rendering notebook: ${error.message}</div>`;
+  }
+})();
+</script>
