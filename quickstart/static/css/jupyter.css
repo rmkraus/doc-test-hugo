@@ -1,0 +1,197 @@
+/* Jupyter Notebook Styling */
+.jupyter-notebook-container {
+  margin: 2rem 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+.jupyter-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+.jupyter-error {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 4px;
+  padding: 1rem;
+  color: #c33;
+  margin: 1rem 0;
+}
+
+/* Cell styling */
+.jupyter-notebook .cell {
+  margin: 1rem 0;
+  border-left: 3px solid transparent;
+  padding-left: 1rem;
+}
+
+.jupyter-notebook .cell.code_cell {
+  border-left-color: #0366d6;
+}
+
+.jupyter-notebook .cell.text_cell,
+.jupyter-notebook .cell.markdown {
+  border-left-color: #28a745;
+}
+
+/* Code cell styling */
+.jupyter-notebook .input_area,
+.jupyter-notebook .source {
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  overflow-x: auto;
+}
+
+.jupyter-notebook .input_area pre,
+.jupyter-notebook .source pre {
+  margin: 0;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Output styling */
+.jupyter-notebook .output_area,
+.jupyter-notebook .outputs {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background-color: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+}
+
+/* Markdown cell styling */
+.jupyter-notebook .rendered_html,
+.jupyter-notebook .text_cell .rendered_html,
+.jupyter-notebook .markdown .rendered_html {
+  line-height: 1.6;
+}
+
+.jupyter-notebook .rendered_html h1,
+.jupyter-notebook .rendered_html h2,
+.jupyter-notebook .rendered_html h3,
+.jupyter-notebook .rendered_html h4,
+.jupyter-notebook .rendered_html h5,
+.jupyter-notebook .rendered_html h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.jupyter-notebook .rendered_html h1 { font-size: 2rem; }
+.jupyter-notebook .rendered_html h2 { font-size: 1.5rem; }
+.jupyter-notebook .rendered_html h3 { font-size: 1.25rem; }
+
+.jupyter-notebook .rendered_html p {
+  margin: 0.5rem 0;
+}
+
+.jupyter-notebook .rendered_html ul,
+.jupyter-notebook .rendered_html ol {
+  padding-left: 2rem;
+  margin: 0.5rem 0;
+}
+
+.jupyter-notebook .rendered_html li {
+  margin: 0.25rem 0;
+}
+
+.jupyter-notebook .rendered_html blockquote {
+  border-left: 4px solid #dfe2e5;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #6a737d;
+}
+
+.jupyter-notebook .rendered_html code {
+  background-color: rgba(27,31,35,0.05);
+  border-radius: 3px;
+  font-size: 85%;
+  margin: 0;
+  padding: 0.2em 0.4em;
+}
+
+.jupyter-notebook .rendered_html pre {
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  font-size: 85%;
+  line-height: 1.45;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.jupyter-notebook .rendered_html pre code {
+  background: transparent;
+  border: 0;
+  display: inline;
+  line-height: inherit;
+  margin: 0;
+  max-width: auto;
+  overflow: visible;
+  padding: 0;
+  word-wrap: normal;
+}
+
+.jupyter-notebook .rendered_html table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.jupyter-notebook .rendered_html th,
+.jupyter-notebook .rendered_html td {
+  border: 1px solid #dfe2e5;
+  padding: 6px 13px;
+}
+
+.jupyter-notebook .rendered_html th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .jupyter-notebook-container {
+    color: #f0f6fc;
+  }
+
+  .jupyter-notebook .input_area,
+  .jupyter-notebook .source {
+    background-color: #161b22;
+    border-color: #30363d;
+  }
+
+  .jupyter-notebook .output_area,
+  .jupyter-notebook .outputs {
+    background-color: #0d1117;
+    border-color: #30363d;
+  }
+
+  .jupyter-notebook .rendered_html code {
+    background-color: rgba(240,246,252,0.15);
+  }
+
+  .jupyter-notebook .rendered_html pre {
+    background-color: #161b22;
+  }
+
+  .jupyter-notebook .rendered_html th {
+    background-color: #161b22;
+  }
+
+  .jupyter-notebook .rendered_html th,
+  .jupyter-notebook .rendered_html td {
+    border-color: #30363d;
+  }
+
+  .jupyter-notebook .rendered_html blockquote {
+    border-left-color: #30363d;
+    color: #8b949e;
+  }
+}
