@@ -1,0 +1,7 @@
+baseURL = 'https://rmkraus.github.io/doc-test-hugo/'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+
+[module]
+  [[module.imports]]
+    path = 'github.com/McShelby/hugo-theme-relearn'
