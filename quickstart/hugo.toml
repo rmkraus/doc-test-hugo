@@ -1,6 +1,11 @@
 baseURL = 'https://rmkraus.github.io/doc-test-hugo'
 languageCode = 'en-us'
 title = 'My New Hugo Site'
+enableRobotsTXT = true
+
+[params]
+  [params.robots]
+    llmsTXT = true
 
 [module]
   [[module.imports]]
